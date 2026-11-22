@@ -1,1 +1,546 @@
-https://share.gemini.google/KZTkLo0jumZ2
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Daily Care & Sanctuary</title>
+  <style>
+    :root {
+      --bg: #0c1220;
+      --card: #151e32;
+      --card-2: #1c2842;
+      --text: #f3f6fc;
+      --muted: #9fb0cc;
+      --gold: #e6be6a;
+      --gold-soft: rgba(230, 190, 106, 0.16);
+      --accent: #68a5ff;
+      --border: rgba(255, 255, 255, 0.09);
+      --ok: #4cd99c;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: radial-gradient(circle at top, #182542 0%, var(--bg) 60%);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 18px 14px 48px;
+      line-height: 1.5;
+    }
+    .app { max-width: 720px; margin: 0 auto; }
+    header {
+      background: linear-gradient(135deg, rgba(230,190,106,0.14), rgba(104,165,255,0.08));
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+    header h1 { font-size: 1.4rem; color: var(--gold); margin-bottom: 4px; }
+    header p { color: var(--muted); font-size: 0.92rem; }
+    .tabs {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      margin-bottom: 16px;
+    }
+    .tab-btn {
+      background: var(--card);
+      color: var(--muted);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 9px 14px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .tab-btn.active {
+      background: var(--gold-soft);
+      color: var(--gold);
+      border-color: var(--gold);
+    }
+    .panel { display: none; }
+    .panel.active { display: block; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 18px;
+      margin-bottom: 14px;
+    }
+    .card h2 { font-size: 1.08rem; margin-bottom: 10px; color: var(--gold); }
+    .timer-display {
+      font-size: 2.6rem;
+      font-weight: 700;
+      text-align: center;
+      margin: 14px 0;
+      letter-spacing: 2px;
+      color: var(--text);
+    }
+    .row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+    button {
+      background: var(--gold);
+      color: #111622;
+      border: none;
+      border-radius: 12px;
+      padding: 10px 16px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+    button.secondary {
+      background: var(--card-2);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    input, textarea, select {
+      width: 100%;
+      background: var(--card-2);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 0.92rem;
+      margin-bottom: 10px;
+    }
+    textarea { min-height: 90px; resize: vertical; }
+    .reminder-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--card-2);
+      border-radius: 14px;
+      padding: 12px 14px;
+      margin-bottom: 10px;
+    }
+    .badge {
+      background: var(--gold-soft);
+      color: var(--gold);
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+    .days-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .day-btn {
+      background: var(--card-2);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 8px;
+      font-size: 0.84rem;
+      font-weight: 600;
+    }
+    .day-btn.selected { border-color: var(--gold); background: var(--gold-soft); color: var(--gold); }
+    .day-btn.has-audio { box-shadow: inset 0 0 0 1px var(--ok); }
+    .list-item {
+      background: var(--card-2);
+      border-radius: 14px;
+      padding: 12px 14px;
+      margin-top: 10px;
+    }
+    .list-item-title { font-weight: 700; margin-bottom: 6px; }
+    audio { width: 100%; margin-top: 6px; }
+    .status { font-size: 0.85rem; color: var(--ok); margin-top: 8px; min-height: 20px; }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <h1>Daily Care &amp; Sanctuary</h1>
+      <p>Meditation, gentle reminders, 30-day voice notes, music, stories &amp; reading — saved locally on this device.</p>
+    </header>
+
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="sanctuary">Sanctuary</button>
+      <button class="tab-btn" data-tab="voice">30-Day Voice</button>
+      <button class="tab-btn" data-tab="music">Music Room</button>
+      <button class="tab-btn" data-tab="story">Story Room</button>
+      <button class="tab-btn" data-tab="reading">Reading Room</button>
+    </div>
+
+    <section id="sanctuary" class="panel active">
+      <div class="card">
+        <h2>10-Minute Meditation</h2>
+        <p style="color: var(--muted); font-size: 0.9rem;">Breathe slowly, relax your shoulders, and take a quiet pause.</p>
+        <div class="timer-display" id="timerText">10:00</div>
+        <div class="row" style="justify-content: center;">
+          <button id="startTimerBtn">Start</button>
+          <button class="secondary" id="pauseTimerBtn">Pause</button>
+          <button class="secondary" id="resetTimerBtn">Reset</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Daily Care Reminders (7:00 AM · 11:00 AM · 6:00 PM)</h2>
+        <div class="reminder-item">
+          <div>
+            <strong>7:00 AM — Morning Water &amp; Gentle Stretch</strong>
+            <div style="color: var(--muted); font-size: 0.84rem;">Start the day hydrated and unhurried.</div>
+          </div>
+          <span class="badge">07:00</span>
+        </div>
+        <div class="reminder-item">
+          <div>
+            <strong>11:00 AM — Midday Check-In &amp; Rest Eyes</strong>
+            <div style="color: var(--muted); font-size: 0.84rem;">Step away from screens and breathe.</div>
+          </div>
+          <span class="badge">11:00</span>
+        </div>
+        <div class="reminder-item">
+          <div>
+            <strong>6:00 PM — Evening Wind-Down &amp; Care</strong>
+            <div style="color: var(--muted); font-size: 0.84rem;">Slow down and prepare for a calm evening.</div>
+          </div>
+          <span class="badge">18:00</span>
+        </div>
+        <div class="row" style="margin-top: 10px;">
+          <button id="enableNotifBtn">Enable Reminders</button>
+          <span id="reminderStatus" class="status"></span>
+        </div>
+      </div>
+    </section>
+
+    <section id="voice" class="panel">
+      <div class="card">
+        <h2>30-Day Voice Notes</h2>
+        <div class="days-grid" id="daysGrid"></div>
+        <p style="margin-bottom: 8px; font-weight: 600;">Selected: <span id="selectedDayLabel">Day 1</span></p>
+        <input type="file" id="voiceFileInput" accept="audio/*" />
+        <textarea id="voiceNoteText" placeholder="Write a gentle note for this day..."></textarea>
+        <button id="saveVoiceBtn">Save Day Note &amp; Audio</button>
+        <div id="voiceStatus" class="status"></div>
+        <div id="voicePreview"></div>
+      </div>
+    </section>
+
+    <section id="music" class="panel">
+      <div class="card">
+        <h2>Music Room</h2>
+        <input type="text" id="musicTitle" placeholder="Track title (e.g., Rainy Evening)" />
+        <input type="file" id="musicFile" accept="audio/*" />
+        <button id="addMusicBtn">Add to Music Room</button>
+        <div id="musicStatus" class="status"></div>
+        <div id="musicList"></div>
+      </div>
+    </section>
+
+    <section id="story" class="panel">
+      <div class="card">
+        <h2>Story Room</h2>
+        <input type="text" id="storyTitle" placeholder="Story title" />
+        <textarea id="storyText" placeholder="Write a comforting story or memory..."></textarea>
+        <input type="file" id="storyAudio" accept="audio/*" />
+        <button id="addStoryBtn">Save Story</button>
+        <div id="storyStatus" class="status"></div>
+        <div id="storyList"></div>
+      </div>
+    </section>
+
+    <section id="reading" class="panel">
+      <div class="card">
+        <h2>Reading Room</h2>
+        <input type="text" id="readingTitle" placeholder="Article, book note, or poem title" />
+        <textarea id="readingText" placeholder="Paste or write what you want to read..."></textarea>
+        <button id="addReadingBtn">Save to Reading Room</button>
+        <div id="readingStatus" class="status"></div>
+        <div id="readingList"></div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    // Tabs
+    document.querySelectorAll(".tab-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".tab-btn").forEach((b) => b.classList.remove("active"));
+        document.querySelectorAll(".panel").forEach((p) => p.classList.remove("active"));
+        btn.classList.add("active");
+        document.getElementById(btn.dataset.tab).classList.add("active");
+      });
+    });
+
+    // 10-minute meditation timer
+    const DEFAULT_SECONDS = 600;
+    let remaining = DEFAULT_SECONDS;
+    let timerInterval = null;
+    const timerText = document.getElementById("timerText");
+
+    function renderTimer() {
+      const m = String(Math.floor(remaining / 60)).padStart(2, "0");
+      const s = String(remaining % 60).padStart(2, "0");
+      timerText.textContent = `${m}:${s}`;
+    }
+
+    document.getElementById("startTimerBtn").addEventListener("click", () => {
+      if (timerInterval) return;
+      timerInterval = setInterval(() => {
+        if (remaining > 0) {
+          remaining--;
+          renderTimer();
+        } else {
+          clearInterval(timerInterval);
+          timerInterval = null;
+        }
+      }, 1000);
+    });
+
+    document.getElementById("pauseTimerBtn").addEventListener("click", () => {
+      clearInterval(timerInterval);
+      timerInterval = null;
+    });
+
+    document.getElementById("resetTimerBtn").addEventListener("click", () => {
+      clearInterval(timerInterval);
+      timerInterval = null;
+      remaining = DEFAULT_SECONDS;
+      renderTimer();
+    });
+
+    // Reminders (7:00 AM, 11:00 AM, 6:00 PM)
+    const reminderStatus = document.getElementById("reminderStatus");
+    const slots = {
+      "07:00": "7:00 AM — Time for morning water & a gentle stretch.",
+      "11:00": "11:00 AM — Pause, rest your eyes, and take a breath.",
+      "18:00": "6:00 PM — Evening wind-down & self-care."
+    };
+    let lastTriggeredMinute = "";
+
+    document.getElementById("enableNotifBtn").addEventListener("click", async () => {
+      if (!("Notification" in window)) {
+        reminderStatus.textContent = "Notifications not supported in this browser; active while open.";
+        return;
+      }
+      const perm = await Notification.requestPermission();
+      reminderStatus.textContent = perm === "granted"
+        ? "Reminders active (07:00, 11:00, 18:00)."
+        : "Permission not granted; in-page check active while open.";
+    });
+
+    setInterval(() => {
+      const now = new Date();
+      const hh = String(now.getHours()).padStart(2, "0");
+      const mm = String(now.getMinutes()).padStart(2, "0");
+      const key = `${hh}:${mm}`;
+      if (slots[key] && lastTriggeredMinute !== key) {
+        lastTriggeredMinute = key;
+        reminderStatus.textContent = slots[key];
+        if ("Notification" in window && Notification.permission === "granted") {
+          new Notification("Daily Care Reminder", { body: slots[key] });
+        }
+      }
+    }, 20000);
+
+    // IndexedDB setup
+    function openDB() {
+      return new Promise((resolve, reject) => {
+        const req = indexedDB.open("DailyCareSanctuaryDB", 1);
+        req.onupgradeneeded = (e) => {
+          const db = e.target.result;
+          if (!db.objectStoreNames.contains("days")) db.createObjectStore("days", { keyPath: "day" });
+          if (!db.objectStoreNames.contains("music")) db.createObjectStore("music", { keyPath: "id", autoIncrement: true });
+          if (!db.objectStoreNames.contains("stories")) db.createObjectStore("stories", { keyPath: "id", autoIncrement: true });
+          if (!db.objectStoreNames.contains("readings")) db.createObjectStore("readings", { keyPath: "id", autoIncrement: true });
+        };
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = () => reject(req.error);
+      });
+    }
+
+    async function putItem(storeName, value) {
+      const db = await openDB();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(storeName, "readwrite");
+        tx.objectStore(storeName).put(value);
+        tx.oncomplete = () => resolve();
+        tx.onerror = () => reject(tx.error);
+      });
+    }
+
+    async function getItem(storeName, key) {
+      const db = await openDB();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(storeName, "readonly");
+        const req = tx.objectStore(storeName).get(key);
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = () => reject(req.error);
+      });
+    }
+
+    async function getAllItems(storeName) {
+      const db = await openDB();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(storeName, "readonly");
+        const req = tx.objectStore(storeName).getAll();
+        req.onsuccess = () => resolve(req.result || []);
+        req.onerror = () => reject(req.error);
+      });
+    }
+
+    // 30-day voice notes
+    let selectedDay = 1;
+    const daysGrid = document.getElementById("daysGrid");
+    const selectedDayLabel = document.getElementById("selectedDayLabel");
+    const voiceNoteText = document.getElementById("voiceNoteText");
+    const voiceFileInput = document.getElementById("voiceFileInput");
+    const voicePreview = document.getElementById("voicePreview");
+    const voiceStatus = document.getElementById("voiceStatus");
+
+    async function renderDaysGrid() {
+      const allDays = await getAllItems("days");
+      const audioDays = new Set(allDays.filter((d) => d.audioBlob || d.note).map((d) => d.day));
+      daysGrid.innerHTML = "";
+      for (let d = 1; d <= 30; d++) {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "day-btn" + (d === selectedDay ? " selected" : "") + (audioDays.has(d) ? " has-audio" : "");
+        btn.textContent = `Day ${d}`;
+        btn.addEventListener("click", () => selectDay(d));
+        daysGrid.appendChild(btn);
+      }
+    }
+
+    async function selectDay(d) {
+      selectedDay = d;
+      selectedDayLabel.textContent = `Day ${d}`;
+      voiceStatus.textContent = "";
+      const record = await getItem("days", d);
+      voiceNoteText.value = record?.note || "";
+      voicePreview.innerHTML = "";
+      if (record?.audioBlob) {
+        const url = URL.createObjectURL(record.audioBlob);
+        const audio = document.createElement("audio");
+        audio.controls = true;
+        audio.src = url;
+        voicePreview.appendChild(audio);
+      }
+      renderDaysGrid();
+    }
+
+    document.getElementById("saveVoiceBtn").addEventListener("click", async () => {
+      const existing = await getItem("days", selectedDay);
+      const file = voiceFileInput.files[0];
+      const audioBlob = file ? file : (existing?.audioBlob || null);
+      await putItem("days", {
+        day: selectedDay,
+        note: voiceNoteText.value.trim(),
+        audioBlob
+      });
+      voiceFileInput.value = "";
+      voiceStatus.textContent = `Saved Day ${selectedDay}.`;
+      selectDay(selectedDay);
+    });
+
+    // Music Room
+    document.getElementById("addMusicBtn").addEventListener("click", async () => {
+      const title = document.getElementById("musicTitle").value.trim();
+      const file = document.getElementById("musicFile").files[0];
+      if (!file) {
+        document.getElementById("musicStatus").textContent = "Please choose an audio file.";
+        return;
+      }
+      await putItem("music", { title: title || file.name, audioBlob: file });
+      document.getElementById("musicTitle").value = "";
+      document.getElementById("musicFile").value = "";
+      document.getElementById("musicStatus").textContent = "Added to Music Room.";
+      renderMusic();
+    });
+
+    async function renderMusic() {
+      const items = await getAllItems("music");
+      const list = document.getElementById("musicList");
+      list.innerHTML = "";
+      items.forEach((item) => {
+        const div = document.createElement("div");
+        div.className = "list-item";
+        div.innerHTML = `<div class="list-item-title">${escapeHtml(item.title)}</div>`;
+        if (item.audioBlob) {
+          const audio = document.createElement("audio");
+          audio.controls = true;
+          audio.src = URL.createObjectURL(item.audioBlob);
+          div.appendChild(audio);
+        }
+        list.appendChild(div);
+      });
+    }
+
+    // Story Room
+    document.getElementById("addStoryBtn").addEventListener("click", async () => {
+      const title = document.getElementById("storyTitle").value.trim();
+      const text = document.getElementById("storyText").value.trim();
+      const audioBlob = document.getElementById("storyAudio").files[0] || null;
+      if (!title && !text && !audioBlob) {
+        document.getElementById("storyStatus").textContent = "Add a title, story text, or audio.";
+        return;
+      }
+      await putItem("stories", { title: title || "Untitled Story", text, audioBlob });
+      document.getElementById("storyTitle").value = "";
+      document.getElementById("storyText").value = "";
+      document.getElementById("storyAudio").value = "";
+      document.getElementById("storyStatus").textContent = "Story saved.";
+      renderStories();
+    });
+
+    async function renderStories() {
+      const items = await getAllItems("stories");
+      const list = document.getElementById("storyList");
+      list.innerHTML = "";
+      items.forEach((item) => {
+        const div = document.createElement("div");
+        div.className = "list-item";
+        div.innerHTML = `<div class="list-item-title">${escapeHtml(item.title)}</div><p style="color: var(--muted); font-size: 0.9rem;">${escapeHtml(item.text || "")}</p>`;
+        if (item.audioBlob) {
+          const audio = document.createElement("audio");
+          audio.controls = true;
+          audio.src = URL.createObjectURL(item.audioBlob);
+          div.appendChild(audio);
+        }
+        list.appendChild(div);
+      });
+    }
+
+    // Reading Room
+    document.getElementById("addReadingBtn").addEventListener("click", async () => {
+      const title = document.getElementById("readingTitle").value.trim();
+      const text = document.getElementById("readingText").value.trim();
+      if (!title && !text) {
+        document.getElementById("readingStatus").textContent = "Enter a title or text to save.";
+        return;
+      }
+      await putItem("readings", { title: title || "Untitled Note", text });
+      document.getElementById("readingTitle").value = "";
+      document.getElementById("readingText").value = "";
+      document.getElementById("readingStatus").textContent = "Saved to Reading Room.";
+      renderReadings();
+    });
+
+    async function renderReadings() {
+      const items = await getAllItems("readings");
+      const list = document.getElementById("readingList");
+      list.innerHTML = "";
+      items.forEach((item) => {
+        const div = document.createElement("div");
+        div.className = "list-item";
+        div.innerHTML = `<div class="list-item-title">${escapeHtml(item.title)}</div><p style="color: var(--muted); font-size: 0.9rem; white-space: pre-wrap;">${escapeHtml(item.text || "")}</p>`;
+        list.appendChild(div);
+      });
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/[&<>"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m]));
+    }
+
+    // Initial load
+    selectDay(1);
+    renderMusic();
+    renderStories();
+    renderReadings();
+  </script>
+</body>
+</html>
+
